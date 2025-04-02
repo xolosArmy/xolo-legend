@@ -1,15 +1,12 @@
 // Página Web: Historieta Interactiva - La Leyenda del Xoloitzcuintle Web3
-import Head from "next/head";
+
 import { motion } from "framer-motion";
 import { Dog, ShieldCheck, Sparkles, Infinity, HeartHandshake } from "lucide-react";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white">
-      <Head>
-        <title>La Leyenda del Xoloitzcuintle</title>
-        <meta name="description" content="Una historieta digital sobre el Xoloitzcuintle y su conexión ancestral en la era Web3." />
-      </Head>
+    
 
       <main className="max-w-3xl mx-auto py-12 px-4 space-y-8">
         <h1 className="text-4xl font-bold text-center mb-8">🐾 La Leyenda del Xoloitzcuintle 🐾</h1>
