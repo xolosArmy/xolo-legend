@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Dog, ShieldCheck, Sparkles, Infinity, HeartHandshake, Share2, Flame } from "lucide-react";
 
 function App() {
-  const shareUrl = encodeURIComponent("https://xolosarmy.github.io/xolo-legend/");
+  const shareUrl = encodeURIComponent("https://xololegend.xyz/");
   const shareText = encodeURIComponent("🌀 Descubre la leyenda del Xoloitzcuintle en la era Web3: una historieta mística entre Mesoamérica y blockchain. #XolosRamirez #Web3 #HistorietaDigital");
 
   const [isLoading, setIsLoading] = useState(true);
