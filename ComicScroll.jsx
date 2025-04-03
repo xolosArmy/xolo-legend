@@ -5,7 +5,7 @@ const scenes = [
   {
     title: "🔮 La Leyenda del Xoloitzcuintle",
     text: "En el principio, cuando los dioses desplegaban el código fuente del universo, Quetzalcóatl forkeó la realidad con compasión.",
-    image: "/public/escena1-cosmos.png",
+    image: "/escena1-cosmos.png",
   },
   {
     text: "De ese commit cósmico nació el Xoloitzcuintle: un smart contract viviente, nodo sagrado entre mundos, guardián del Mictlán.",
