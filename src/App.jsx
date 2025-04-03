@@ -39,7 +39,13 @@ function App() {
 
       {!isLoading && (
         <main className="max-w-3xl mx-auto py-12 px-4 space-y-8">
-          <h1 className="text-4xl font-bold text-center mb-8">🐾 La Leyenda del Xoloitzcuintle 🐾</h1>
+  <img
+    src="/escena1-cosmos.png"
+    alt="Códice cósmico con Quetzalcóatl"
+    className="rounded-2xl shadow-xl mx-auto w-full max-w-lg mb-8"
+  />
+  <h1 className="text-4xl font-bold text-center mb-8">🐾 La Leyenda del Xoloitzcuintle 🐾</h1>
+
 
           {/* Paneles */}
           <motion.div className="bg-black text-white rounded-2xl shadow-xl p-6 text-xl" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
