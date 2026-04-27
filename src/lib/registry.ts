@@ -83,10 +83,10 @@ function inferListingType(tokenId?: string): ListingType {
 
 function normalizePriceAmount(priceSats?: string) {
   if (!priceSats) {
-    return 0;
+    return undefined;
   }
   const numeric = Number(priceSats);
-  return Number.isFinite(numeric) ? numeric : 0;
+  return Number.isFinite(numeric) ? numeric : undefined;
 }
 
 function buildRegistryListing(item: RegistryApiRecord): RegistryListing {
@@ -108,6 +108,7 @@ function buildRegistryListing(item: RegistryApiRecord): RegistryListing {
       ? item.createdAt
       : Date.now();
   const listingType = inferListingType(tokenId);
+  const priceAmount = normalizePriceAmount(priceSats);
 
   return {
     id,
@@ -125,7 +126,7 @@ function buildRegistryListing(item: RegistryApiRecord): RegistryListing {
     type: listingType,
     name: title,
     image: imageUrl,
-    price: { amount: normalizePriceAmount(priceSats), symbol: "sats" },
+    price: { amount: priceAmount, symbol: "sats" },
     status:
       verification === "spent" || verification === "invalid" || verification === "not_found"
         ? "sold"

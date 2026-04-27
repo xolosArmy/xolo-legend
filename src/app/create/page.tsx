@@ -23,6 +23,42 @@ function buildId() {
   return `listing-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+type DerivedRegistryOnchainFields = {
+  tokenId?: string;
+  priceSats?: string;
+  amountAtoms?: string;
+};
+
+function deriveRegistryOnchainFields(params: {
+  terms?: OfferStatus["terms"];
+  verification?: OfferStatus;
+}): DerivedRegistryOnchainFields {
+  const { terms, verification } = params;
+
+  const tokenId = terms?.tokenId ?? verification?.tokenId ?? undefined;
+
+  const priceSats = terms
+    ? terms.kind === "token"
+      ? terms.totalSats.toString()
+      : terms.priceSats.toString()
+    : verification?.priceSats !== undefined
+      ? String(verification.priceSats)
+      : undefined;
+
+  const amountAtoms =
+    terms?.kind === "token"
+      ? terms.sellAtoms.toString()
+      : verification?.amountAtoms !== undefined
+        ? String(verification.amountAtoms)
+        : undefined;
+
+  return {
+    tokenId: tokenId || undefined,
+    priceSats: priceSats || undefined,
+    amountAtoms: amountAtoms || undefined
+  };
+}
+
 export default function CreateListingPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -217,7 +253,25 @@ export default function CreateListingPage() {
       return;
     }
     const trimmed = offerTxId.trim();
-    const terms = verification?.terms;
+    let publishVerification = verification;
+
+    if (trimmed && (!publishVerification || !publishVerification.terms)) {
+      try {
+        const refreshed = await verifyOffer(trimmed);
+        if (refreshed) {
+          publishVerification = refreshed;
+          setVerification(refreshed);
+        }
+      } catch (error) {
+        console.warn("Could not refresh offer verification before publishing:", error);
+      }
+    }
+
+    const onchainFields = deriveRegistryOnchainFields({
+      terms: publishVerification?.terms,
+      verification: publishVerification
+    });
+
     const listing: RegistryListingInput = {
       id: buildId(),
       createdAt: Date.now(),
@@ -226,15 +280,10 @@ export default function CreateListingPage() {
       collection: collection.trim() || undefined,
       imageUrl: previewImage || undefined,
       offerTxId: trimmed,
-      tokenId: terms?.tokenId ?? verification?.tokenId,
-      priceSats: terms
-        ? String(terms.kind === "token" ? terms.totalSats : terms.priceSats)
-        : verification?.priceSats !== undefined
-          ? String(verification.priceSats)
-          : undefined,
-      amountAtoms:
-        terms?.kind === "token" ? terms.sellAtoms.toString() : verification?.amountAtoms,
-      verification: verification?.status ?? "unknown"
+      tokenId: onchainFields.tokenId,
+      priceSats: onchainFields.priceSats,
+      amountAtoms: onchainFields.amountAtoms,
+      verification: publishVerification?.status ?? "unknown"
     };
     try {
       await addListing(listing);

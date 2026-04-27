@@ -357,10 +357,10 @@ export function MarketplaceClient({ listings }: MarketplaceClientProps) {
     });
 
     if (sort === "price-asc") {
-      next = [...next].sort((a, b) => a.price.amount - b.price.amount);
+      next = [...next].sort((a, b) => (a.price.amount ?? 0) - (b.price.amount ?? 0));
     }
     if (sort === "price-desc") {
-      next = [...next].sort((a, b) => b.price.amount - a.price.amount);
+      next = [...next].sort((a, b) => (b.price.amount ?? 0) - (a.price.amount ?? 0));
     }
 
     return next;

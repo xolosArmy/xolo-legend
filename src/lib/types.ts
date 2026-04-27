@@ -3,7 +3,7 @@ export type ListingType = "nft" | "rmz" | "etoken" | "mintpass";
 export type ListingStatus = "available" | "sold";
 
 export interface ListingPrice {
-  amount: number;
+  amount?: number;
   symbol: string;
 }
 

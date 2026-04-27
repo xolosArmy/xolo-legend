@@ -68,11 +68,13 @@ export function ListingCard({
   const termsStatus = offerStatus?.termsStatus;
   const onChainTerms = offerStatus?.terms;
   const isExternalImage = !listing.image.startsWith("/");
+  const listingPriceAmount = listing.price.amount;
   const hasManualPrice =
     termsStatus === "manual" &&
-    Number.isFinite(listing.price.amount) &&
-    listing.price.amount > 0;
-  const hasListingPrice = Number.isFinite(listing.price.amount) && listing.price.amount > 0;
+    Number.isFinite(listingPriceAmount) &&
+    (listingPriceAmount ?? 0) > 0;
+  const hasListingPrice =
+    Number.isFinite(listingPriceAmount) && (listingPriceAmount ?? 0) > 0;
   const displayPrice =
     termsStatus === "manual"
       ? hasManualPrice
@@ -83,6 +85,7 @@ export function ListingCard({
         : hasListingPrice
           ? listing.price
           : undefined;
+  const displayPriceAmount = displayPrice?.amount;
   const tokenSymbol =
     listing.type === "rmz"
       ? "RMZ"
@@ -93,8 +96,8 @@ export function ListingCard({
           : "TOKEN";
   const priceLabel = onChainTerms
     ? `${onChainTerms.xecTotal} XEC`
-    : displayPrice
-      ? `${displayPrice.amount.toLocaleString(undefined, {
+    : displayPrice && typeof displayPriceAmount === "number" && Number.isFinite(displayPriceAmount)
+      ? `${displayPriceAmount.toLocaleString(undefined, {
           maximumFractionDigits: 2
         })} ${displayPrice.symbol}`
       : undefined;
@@ -507,7 +510,7 @@ export function ListingCard({
           <div className="flex flex-wrap justify-between gap-2">
             <span className="text-white/40">Price</span>
             <span className="text-white/80">
-              {Number.isFinite(listing.price.amount) ? `${listing.price.amount} XEC` : "—"}
+              {Number.isFinite(listingPriceAmount) ? `${listingPriceAmount} XEC` : "—"}
             </span>
           </div>
           {listing.amount ? (
