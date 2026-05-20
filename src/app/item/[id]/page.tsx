@@ -1,31 +1,19 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { loadRegistry, type RegistryListing } from "@/lib/registry";
+import { notFound } from "next/navigation";
 import { ListingDetails } from "@/components/ListingDetails";
+import { loadRegistry, REGISTRY_REVALIDATE_SECONDS } from "@/lib/registry";
 
 interface ItemPageProps {
   params: { id: string };
 }
 
-export default function ItemPage({ params }: ItemPageProps) {
-  const [listing, setListing] = useState<RegistryListing | null>(null);
-  const [loading, setLoading] = useState(true);
+export const revalidate = REGISTRY_REVALIDATE_SECONDS;
 
-  useEffect(() => {
-    loadRegistry().then((listings) => {
-      const found = listings.find((l) => l.id === params.id);
-      setListing(found || null);
-      setLoading(false);
-    });
-  }, [params.id]);
-
-  if (loading) {
-    return <div className="p-8 text-center">Cargando templo...</div>;
-  }
+export default async function ItemPage({ params }: ItemPageProps) {
+  const listings = await loadRegistry();
+  const listing = listings.find((entry) => entry.id === params.id);
 
   if (!listing) {
-    return <div className="p-8 text-center">Listado no encontrado.</div>;
+    notFound();
   }
 
   return (

@@ -3,9 +3,9 @@ import { RmzOnChainSection } from "@/components/RmzOnChainSection";
 import { CollectionCard } from "@/components/CollectionCard";
 import collections from "@/data/collections.json";
 import { TONALLI_WEB_URL } from "@/lib/links";
-import { loadRegistry } from "@/lib/registry";
+import { loadRegistry, REGISTRY_REVALIDATE_SECONDS } from "@/lib/registry";
 
-export const dynamic = "force-dynamic";
+export const revalidate = REGISTRY_REVALIDATE_SECONDS;
 
 export default async function MarketplacePage() {
   const typedListings = await loadRegistry();

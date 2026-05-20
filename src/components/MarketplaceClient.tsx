@@ -8,7 +8,7 @@ import { FilterBar } from "@/components/FilterBar";
 import { ListingCard } from "@/components/ListingCard";
 import { useFavorites } from "@/lib/storage";
 import { useOnChain } from "@/state/onchain";
-import { loadRegistry, removeListing, type RegistryListing } from "@/lib/registry";
+import { removeListing, type RegistryListing } from "@/lib/registry";
 import { RMZ_TOKEN_ID, TONALLI_WEB_URL } from "@/lib/constants";
 import {
   setTokenMeta,
@@ -77,12 +77,6 @@ export function MarketplaceClient({ listings }: MarketplaceClientProps) {
     setRegistryListings(listings);
   }, [listings]);
 
-  useEffect(() => {
-    // Llamada asíncrona al registro global del VPS
-    loadRegistry().then((globalListings) => {
-      setRegistryListings(globalListings);
-    });
-  }, []);
 
   const initialTabRef = useRef(true);
 

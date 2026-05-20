@@ -1,6 +1,7 @@
 import type { Listing, ListingType } from "@/lib/types";
 
 const DEFAULT_REGISTRY_URL = "https://api.xolosarmy.xyz/listings";
+export const REGISTRY_REVALIDATE_SECONDS = 3600;
 
 type RegistryVerification =
   | "available"
@@ -154,7 +155,10 @@ export function isRegistryPersistent() {
  */
 export async function loadRegistry(): Promise<RegistryListing[]> {
   try {
-    const response = await fetch(getRegistryUrl(), { cache: "no-store" });
+    const response = await fetch(getRegistryUrl(), {
+      next: { revalidate: REGISTRY_REVALIDATE_SECONDS },
+      signal: AbortSignal.timeout(8000)
+    });
     if (!response.ok) throw new Error("Error en servidor");
     const data = (await response.json()) as unknown;
     if (!Array.isArray(data)) {
